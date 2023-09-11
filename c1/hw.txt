@@ -1,0 +1,4 @@
+1. Naprevete folder vo pkg/rick_and_morty i vnatre index.js so funkcija za povik na api-to
+2. Implementirajte kesiranje za /charaters od api-to, za kesiranje ni treba timestamp, kesirajte po IME
+3. Ke napravite handler za da ja povikuva taa funkcija
+4. Ke napravite ruta za pristap vo index.js glavniot fajl
