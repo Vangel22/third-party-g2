@@ -1,4 +1,7 @@
-const { getCityWeather } = require("../pkg/openweathermap");
+const {
+  getCityWeather,
+  getFiveDaysForecastForCity,
+} = require("../pkg/openweathermap");
 
 const getForCity = async (req, res) => {
   try {
@@ -9,6 +12,15 @@ const getForCity = async (req, res) => {
   }
 };
 
-const getFiveDaysForecast = async () => {};
+const getFiveDaysForecast = async (req, res) => {
+  try {
+    const { lat, lon } = req.params;
+    console.log("params", req.params);
+    const forecast = await getFiveDaysForecastForCity(lat, lon);
+    res.send(forecast);
+  } catch (err) {
+    return res.status(500).send("Internal server error");
+  }
+};
 
-module.exports = { getForCity };
+module.exports = { getForCity, getFiveDaysForecast };

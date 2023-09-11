@@ -49,8 +49,24 @@ const getCityWeather = async (city) => {
   }
 };
 
-const getFiveDaysForecastForCity = async (city) => {};
+const getFiveDaysForecastForCity = async (lat, lon) => {
+  const URL = `${
+    config.getSection("weather").API_URL
+  }/forecast?lat=${lat}&lon=${lon}&appid=${
+    config.getSection("weather").api_key
+  }`;
+
+  try {
+    const res = await fetch(URL);
+    const data = await res.json();
+
+    console.log("city", data.city);
+  } catch (err) {
+    throw err;
+  }
+};
 
 module.exports = {
   getCityWeather,
+  getFiveDaysForecastForCity,
 };
