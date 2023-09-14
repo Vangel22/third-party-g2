@@ -18,6 +18,7 @@ const mailTemplates = {
 };
 
 const sendMail = async (to, type, data) => {
+  console.log("send mail");
   const mg = mailgun.client({
     username: "api",
     key:
@@ -52,6 +53,8 @@ const sendMail = async (to, type, data) => {
     html: content,
   };
 
+  console.log("options", options);
+
   try {
     const res = await mg.messages.create(
       config.getSection("development").domain,
@@ -65,7 +68,12 @@ const sendMail = async (to, type, data) => {
 };
 
 const readTemplate = async (file) => {
-  //vrati nov promise so fajlot
+  return new Promise((success, fail) => {
+    fs.readFile(file, "utf-8", (err, data) => {
+      if (err) return fail(err);
+      return success(data);
+    });
+  });
 };
 
 module.exports = {
