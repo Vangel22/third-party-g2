@@ -22,7 +22,7 @@ const getByEmail = async (email) => {
 };
 
 const setNewPassword = async (id, password) => {
-  return null;
+  return await Account.updateOne({ _id: id }, password);
 };
 
 const getAll = async () => {
