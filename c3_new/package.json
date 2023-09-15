@@ -1,5 +1,5 @@
 {
-  "name": "c3",
+  "name": "c03",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,13 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-jwt": "^8.4.1",
     "form-data": "^4.0.0",
-    "jsonwebtoken": "^9.0.2",
-    "mailgun.js": "^9.2.1",
-    "mongoose": "^7.5.0",
+    "mailgun": "^0.5.0",
+    "mailgun.js": "^8.2.1",
+    "mongoose": "^7.0.3",
     "node-input-validator": "^4.5.1"
   }
 }

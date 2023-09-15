@@ -1,51 +1,55 @@
 const express = require("express");
 const { expressjwt: jwt } = require("express-jwt");
 
+const {
+  sendMessage,
+  sendWelcomeMail,
+  sendPasswordResetMail,
+} = require("./handlers/mailer");
 const config = require("./pkg/config");
 require("./pkg/db");
-
 const {
   login,
+  register,
+  refreshToken,
   forgotPassword,
   resetPassword,
-  resetPasswordTemplate,
+  resetPassTemplate,
 } = require("./handlers/auth");
-
-const { sendWelcomeMail, sendPasswordResetMail } = require("./handlers/mailer");
 
 const api = express();
 
 api.use(express.json());
-api.use(express.urlencoded({ extended: true }));
+api.use(express.urlencoded({ extended: false }));
 api.set("view engine", "ejs");
 
 api.use(
+  "/api",
   jwt({
-    secret: config.getSection("development").jwt,
+    secret: config.get("development").jwt_key,
     algorithms: ["HS256"],
   }).unless({
     path: [
       "/api/v1/auth/login",
-      "/api/v1/auth/reset-password",
+      "/api/v1/auth/register",
       "/api/v1/auth/forgot-password",
-      "/forgot-password",
-      "/reset-password/:id/:token",
     ],
   })
 );
 
-// api.get('/users', ) -> mi treba tuka jwt bidejki users mozeme da gi zememe samo ako sme najaveni
 api.post("/api/v1/auth/login", login);
+api.post("/api/v1/auth/register", register);
+api.get("/api/v1/auth/refresh-token", refreshToken);
 api.post("/api/v1/auth/forgot-password", forgotPassword);
 api.post("/reset-password/:id/:token", resetPassword);
-api.get("/reset-password/:id/:token", resetPasswordTemplate);
-
-api.post("/api/v1/send-mail", sendWelcomeMail);
-api.post("/api/v1/reset-pass", sendPasswordResetMail);
-
+api.get("/reset-password/:id/:token", resetPassTemplate);
 api.get("/forgot-password", (req, res) => {
   res.render("forgot-password");
 });
+
+api.post("/api/v1/sendmessage", sendMessage);
+api.post("/api/v1/sendmail", sendWelcomeMail);
+api.post("/api/v1/reset-pass", sendPasswordResetMail);
 
 api.use(function (err, req, res, next) {
   if (err.name === "UnauthorizedAccess") {
@@ -53,10 +57,8 @@ api.use(function (err, req, res, next) {
   }
 });
 
-api.listen(config.getSection("development").port, (err) => {
+api.listen(config.get("development").port, (err) => {
   err
-    ? console.error(err)
-    : console.log(
-        `Server started at port ${config.getSection("development").port}`
-      );
+    ? console.log(err)
+    : console.log(`Server started on port ${config.get("development").port}`);
 });
